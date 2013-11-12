@@ -18,7 +18,7 @@ public class Controller {
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(crawlStorageFolder);
         config.setMaxDepthOfCrawling(2);
-//        config.setPolitenessDelay(politenessDelay); // default is 200ms
+        config.setPolitenessDelay(200); // even without this set, the default is 200ms
 
         /*
          * Instantiate the controller for this crawl.
