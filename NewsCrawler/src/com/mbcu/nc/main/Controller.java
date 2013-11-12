@@ -20,7 +20,7 @@ public class Controller {
        
         config.setPolitenessDelay(200);
         config.setMaxDepthOfCrawling(2);
-        config.setMaxPagesToFetch(1000);
+        config.setMaxPagesToFetch(10000);
 
         /*
          * Instantiate the controller for this crawl.
