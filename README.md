@@ -2,7 +2,7 @@ news-crawler
 ============
 
 
-To start, download:
+To use, download:
 
 http://code.google.com/p/crawler4j/downloads/detail?name=crawler4j-3.5.zip
 
