@@ -2,12 +2,13 @@ news-crawler
 ============
 
 
-To use, download:
+To use, download import all JAR to the project:
 
-http://code.google.com/p/crawler4j/downloads/detail?name=crawler4j-3.5.zip
+crawler4j
 
-http://code.google.com/p/crawler4j/downloads/detail?name=crawler4j-3.5-dependencies.zip
+crawler4j-dependencies
 
-Unpack, import all JAR to the project
+joda-time
+
 
 Compile and run Controller.java
