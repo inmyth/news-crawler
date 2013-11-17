@@ -12,5 +12,7 @@ public class CrawlerParent extends WebCrawler {
 					+ "|wav|avi|mov|mpeg|ram|m4v|pdf"
 					+ "|xml|ico"
 					+ "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
+	
+	
 
 }
