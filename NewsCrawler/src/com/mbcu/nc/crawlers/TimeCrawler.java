@@ -2,8 +2,11 @@ package com.mbcu.nc.crawlers;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -148,28 +151,15 @@ public class TimeCrawler extends CrawlerParent{
 			System.out.println("Html length: " + html.length());
 			System.out.println("Number of outgoing links: " + links.size());
 
-			try {
-				Content content = parse(page.getWebURL().getDomain(), new String(page.getContentData(), "UTF-8"));
-
-				File file = new File(PATH_RESULT + FileUtils.sanitize(url) + ".txt");
-				FileWriter fw = new FileWriter(file.getAbsoluteFile());
-				BufferedWriter bw = new BufferedWriter(fw);
-				bw.write(GsonUtils.toJson(content));
-//				bw.write(new String(page.getContentData()));
-				bw.close();
-				System.out.println("Done");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			Content content = parse(html);
+			FileUtils.save(content, PATH_RESULT, url);
 		}
 	}
 	    
-	    private Content parse(String domain, String html){
+	    private Content parse(String html){
 			Content content = new Content();
 			Document doc = Jsoup.parse(html);
-
-			
-			
+		
 			Elements contents = doc.select("p");
 			Iterator<Element> it = contents.iterator();
 			String cString = "";

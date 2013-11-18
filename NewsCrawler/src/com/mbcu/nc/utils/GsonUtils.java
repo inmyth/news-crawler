@@ -17,7 +17,10 @@ public class GsonUtils
 
 	
 	public static String toJson(Object object){
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		Gson gson = new GsonBuilder()
+		.setPrettyPrinting()
+		.disableHtmlEscaping()
+		.create();		
 		String json = gson.toJson(object);
 		return json;
 	}

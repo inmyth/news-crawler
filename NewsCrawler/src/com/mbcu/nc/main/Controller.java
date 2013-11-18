@@ -8,6 +8,7 @@ import org.joda.time.format.ISODateTimeFormat;
 import com.mbcu.nc.crawlers.ChicagoTribuneCrawler;
 import com.mbcu.nc.crawlers.CnnCrawler;
 import com.mbcu.nc.crawlers.HuffPoCrawler;
+import com.mbcu.nc.crawlers.ReutersCrawler;
 import com.mbcu.nc.crawlers.TimeCrawler;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
@@ -30,10 +31,16 @@ public class Controller {
 //		CrawlController crawlTime = TimeCrawler.buildController();
 //		crawlTime.startNonBlocking(TimeCrawler.class, numberOfCrawlers);
 		
-		CrawlController huffPoCrawler = HuffPoCrawler.buildController();
-		huffPoCrawler.startNonBlocking(HuffPoCrawler.class, numberOfCrawlers);
+//		CrawlController huffPoCrawler = HuffPoCrawler.buildController();
+//		huffPoCrawler.startNonBlocking(HuffPoCrawler.class, numberOfCrawlers);
+		
+		CrawlController reutersController = ReutersCrawler.buildController();
+		reutersController.startNonBlocking(ReutersCrawler.class, 7);
+
 		
 
 
+		
+		
 	}
 }
