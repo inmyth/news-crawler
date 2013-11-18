@@ -11,6 +11,7 @@ import com.mbcu.nc.crawlers.CnnCrawler;
 import com.mbcu.nc.crawlers.HuffPoCrawler;
 import com.mbcu.nc.crawlers.ReutersCrawler;
 import com.mbcu.nc.crawlers.TimeCrawler;
+import com.mbcu.nc.crawlers.UsaTodayCrawler;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
@@ -39,10 +40,9 @@ public class Controller {
 //		reutersController.startNonBlocking(ReutersCrawler.class, 7);
 
 		
-//		CrawlController bloombergController = BloombergCrawler.buildController();
-//		bloombergController.startNonBlocking(BloombergCrawler.class, numberOfCrawlers);
+		CrawlController usatController = UsaTodayCrawler.buildController();
+		usatController.startNonBlocking(UsaTodayCrawler.class, numberOfCrawlers);
 
-		
-		
+
 	}
 }

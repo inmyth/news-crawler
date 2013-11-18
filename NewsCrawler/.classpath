@@ -24,5 +24,6 @@
 	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/jsoup-1.7.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/joda-time-2.3-dist/joda-time-2.3/joda-time-2.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/joda-time-2.3-dist/joda-time-2.3/joda-time-2.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/commons-io-2.4-bin/commons-io-2.4/commons-io-2.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
