@@ -22,7 +22,6 @@ import org.jsoup.select.Elements;
 
 import com.mbcu.nc.json.Content;
 import com.mbcu.nc.main.Config;
-import com.mbcu.nc.utils.FileUtils;
 import com.mbcu.nc.utils.GsonUtils;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
@@ -455,7 +454,7 @@ public class ReutersCrawler extends CrawlerParent {
 			}			
 		}
 			
-		File f = new File(PATH_RESULT + FileUtils.sanitize(href) + ".txt");
+		File f = new File(PATH_RESULT + sanitize(href) + ".txt");
 		if (f.exists())
 			return false;
 		
@@ -484,7 +483,7 @@ public class ReutersCrawler extends CrawlerParent {
 			System.out.println("Number of outgoing links: " + links.size());
 
 			Content content = parse(html);
-			FileUtils.save(content, PATH_RESULT, url);
+			save(content, PATH_RESULT, url);
 		}
 	}
 	    
@@ -517,12 +516,9 @@ public class ReutersCrawler extends CrawlerParent {
 			}
 			content.setAuthor(authorString);
 		}
-		// <span class="timestamp">Thu Mar 17, 2011 5:33pm EDT</span>
-
 		Element date = doc.select("span.timestamp").first();
 		if (date != null) {
 			String dateString = date.text();
-			// "Monday, Jan 15, 2007";
 			if (dateString != null && !dateString.trim().isEmpty()) {
 				try {
 					DateTimeFormatter formatter = DateTimeFormat.forPattern("E MMM d, yyyy hh:mma z");
@@ -533,8 +529,6 @@ public class ReutersCrawler extends CrawlerParent {
 				}
 			}
 		}
-
-		System.out.println(GsonUtils.toJson(content));
 		return content;
 	}
 

@@ -24,7 +24,6 @@ import org.jsoup.select.Elements;
 
 import com.mbcu.nc.json.Content;
 import com.mbcu.nc.main.Config;
-import com.mbcu.nc.utils.FileUtils;
 import com.mbcu.nc.utils.GsonUtils;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
@@ -181,7 +180,7 @@ public class ChicagoTribuneCrawler extends CrawlerParent {
 			}			
 		}
 			
-		File f = new File(PATH_RESULT + FileUtils.sanitize(href) + ".txt");
+		File f = new File(PATH_RESULT + sanitize(href) + ".txt");
 		if (f.exists())
 			return false;
 		
@@ -210,7 +209,7 @@ public class ChicagoTribuneCrawler extends CrawlerParent {
 			System.out.println("Number of outgoing links: " + links.size());
 
 			Content content = parse(html);
-			FileUtils.save(content, PATH_RESULT, url);
+			save(content, PATH_RESULT, url);
 		}
 	}
 
