@@ -10,5 +10,6 @@ crawler4j-dependencies
 
 joda-time
 
+gson-2.2.4
 
 Compile and run Controller.java
