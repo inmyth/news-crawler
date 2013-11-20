@@ -20,7 +20,7 @@ public class CrawlerParent extends WebCrawler {
 			.compile(".*(\\.(css|js|bmp|gif|jpe?g"
 					+ "|png|tiff?|mid|mp2|mp3|mp4"
 					+ "|wav|avi|mov|mpeg|ram|m4v|pdf"
-					+ "|xml|ico"
+					+ "|xml|ico|cssx"
 					+ "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
 	
 	public void makeDir(String path){

@@ -158,22 +158,28 @@ public class CnnCrawler extends CrawlerParent {
 			System.out.println("Number of outgoing links: " + links.size());
 
 			Content content = parse(html);
+			content.setUrl(url);
 			save(content, PATH_RESULT, url);
 		}
 	}
 
 	private Content parse(String html) {
 		Content content = new Content();
+		content.setHtml(html);
 		Document doc = Jsoup.parse(html);
 
 		Elements contents = doc.select("p");
 		Iterator<Element> it = contents.iterator();
 		String cString = "";
 		while (it.hasNext()) {
+			
 			Element c = it.next();
-			cString += c.select("p").text();
+			String temp = c.text();
+			if (!temp.contains("Loading weather data ...")){
+				cString += " " + temp;
+			}			
 		}
-		content.setHtml(cString);
+		content.setText(cString);
 
 		content.setTitle(doc.select("meta[itemprop=headline][property=og:title]").attr("content"));
 		content.setAuthor(doc.select("meta[itemprop=author][name=author]").attr("content"));

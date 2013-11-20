@@ -2,12 +2,23 @@ package com.mbcu.nc.json;
 
 public class Content {
 
+	private String url;
 	private String title;
 	private String author;
 	private String place;
 	private long timestamp;
+	private String text;
 	private String html;
 
+	/**
+	 * 
+	 * @param url
+	 * url
+	 */
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
 	/**
 	 * 
 	 * @param author
@@ -19,8 +30,17 @@ public class Content {
 
 	/**
 	 * 
+	 * @param text
+	 *            parsed text
+	 */
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	/**
+	 * 
 	 * @param html
-	 *            The content
+	 *            The raw html
 	 */
 	public void setHtml(String html) {
 		this.html = html;
@@ -74,4 +94,11 @@ public class Content {
 		return title;
 	}
 
+	public String getText() {
+		return text;
+	}
+	
+	public String getUrl() {
+		return url;
+	}
 }

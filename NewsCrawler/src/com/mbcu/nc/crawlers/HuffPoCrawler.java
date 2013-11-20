@@ -57,7 +57,7 @@ public class HuffPoCrawler extends CrawlerParent {
 			add("voces.huffingtonpost");
 			add("videos.huffingtonpost");
 			add("live.huffingtonpost");
-
+			
 		}
 	};
 
@@ -188,6 +188,8 @@ public class HuffPoCrawler extends CrawlerParent {
 			add("http://www.huffingtonpost.com/politics/");
 			add("http://www.huffingtonpost.com/news/pollster/");
 			add("http://www.huffingtonpost.com/tedtalks/");
+			add("feeds.huffingtonpost.com");
+			
 
 		}
 	};
@@ -203,10 +205,8 @@ public class HuffPoCrawler extends CrawlerParent {
 		 */
 		PageFetcher pageFetcher = new PageFetcher(config);
 		RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
-		RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig,
-				pageFetcher);
-		CrawlController controller = new CrawlController(config, pageFetcher,
-				robotstxtServer);
+		RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+		CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
 		for (String seed : seeds) {
 			controller.addSeed(seed);
 		}
@@ -257,12 +257,14 @@ public class HuffPoCrawler extends CrawlerParent {
 			System.out.println("Number of outgoing links: " + links.size());
 
 			Content content = parse(html);
+			content.setUrl(url);
 			save(content, PATH_RESULT, url);
 		}
 	}
 
 	private Content parse(String html) {
 		Content content = new Content();
+		content.setHtml(html);
 		Document doc = Jsoup.parse(html);
 
 		Elements contents = doc.select("p");
@@ -270,18 +272,35 @@ public class HuffPoCrawler extends CrawlerParent {
 		String cString = "";
 		while (it.hasNext()) {
 			Element c = it.next();
-			cString += c.select("p").text();
+			String temp = c.text();
+			if (!temp.contains("Get top stories and blogs posts emailed")){
+				cString += " " + temp;
+			}
+			
 		}
-		content.setHtml(cString);
+		content.setText(cString);
 
 		Element title = doc.select("title").first();
 		content.setTitle(title != null ? title.text() : null);
 		
 //		<meta name="author" content="Elise Foley" />
-		String author = doc.select("meta[author]").attr("content");
+		
+		String author = null;
+		Element authorEl = doc.select("a[rel=author]").first();	
+		if(authorEl != null){
+			author = authorEl.text();
+		}
+		if (author == null){
+			author = doc.select("meta[name=author]").attr("content");
+		}
+		if (author == null){
+			author = doc.select("meta[property=article:author]").attr("content");
+		}
+		
+		
 		content.setAuthor(author);
 
-		String dateTime = doc.select("meta[sailthru.date]").attr("content");
+		String dateTime = doc.select("meta[name=sailthru.date]").attr("content");
 		if (dateTime != null && !dateTime.trim().isEmpty()) {
 			try{
 				DateTimeFormatter formatter = DateTimeFormat.forPattern("E, d MMM yyyy hh:mm:ss Z");

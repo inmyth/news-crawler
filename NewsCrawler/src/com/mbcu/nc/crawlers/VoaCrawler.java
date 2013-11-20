@@ -3,7 +3,6 @@ package com.mbcu.nc.crawlers;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -15,7 +14,6 @@ import java.util.Set;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -34,10 +32,10 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import edu.uci.ics.crawler4j.url.WebURL;
 
-public class TimeCrawler extends CrawlerParent{
+public class VoaCrawler extends CrawlerParent {
 	
-	public static final String HOST = "time.com";
-	public static final String PATH_RESULT = "M:\\data\\res\\time\\";
+	public static final String HOST = "www.voanews.com";
+	public static final String PATH_RESULT = "M:\\data\\res\\voa\\";
 	
 	@Override
 	public void onStart() {
@@ -45,44 +43,37 @@ public class TimeCrawler extends CrawlerParent{
 	}
 	
 	static Set<String> ignores = new HashSet<String>(){{
-		add("content.time.com/time/rss");
-		add("content.time.com/time/photogallery");
-		add("time.com/time/mobile");
-		add("content.time.com/time/mobile-apps");
-		add("content.time.com/time/reprints");			
-		add("content.time.com/time/magazine");
-		add("life.time.com");
-		add("content.time.com/time/video");
-		add("content.time.com/time/photoessays");
-		add("content.time.com/time/faq");
-		add("content.time.com/time/contactus");
-		add("time.com/time/archive/feedback");
-		add("content.time.com/time/archive");
-		add("content.time.com/time/covers");
-		add("content.time.com/time/static");
-		
+		add("learningenglish.voanews.com");
+		add("voanews.com/login.html");
+		add("voanews.com/signup.html");
+		add("voanews.com/articleprintview");
+		add("voanews.com/emailtofriend");
+		add("voanews.com/media");
+		add("voanews.com/info/podcast");
+		add("voanews.com/rsspage");
+		add("voanews.com/subscribe");
+		add("m.voanews.com");
+		add("blogs.voanews.com");
+		add("voanews.com/info/contact_us");
+		add("pronounce.voanews.com");
+		add("voanews.com/programindex");		
+		add("voanews.com/api");
 	}
 	};
 	
 	static Set<String> seeds = new HashSet<String>(){{		
-		add(Config.PROTOCOL_HTTP + HOST + "/time");		
-		add(Config.PROTOCOL_HTTP + "www." + HOST + "/time/");		
-		add("http://newsfeed.time.com");
-		add("http://nation.time.com");
-		add("http://swampland.time.com");
-		add("http://world.time.com");
-		add("http://business.time.com");
-		add("http://techland.time.com");
-		add("http://healthland.time.com");
-		add("http://science.time.com");
-		add("http://science.time.com");
-		add("http://content.time.com/time/specials");
-		add("http://time100.time.com");
-		add("http://poy.time.com");
-		add("http://content.time.com/time/quotes");		
-		add("http://content.time.com/time/top10/");
-		add("http://content.time.com/time/static/sitemap/");
-		
+		add(Config.PROTOCOL_HTTP + HOST);		
+		add(Config.PROTOCOL_HTTP + HOST + "/");	
+		add("http://www.voanews.com/section/usa/2203.html");
+		add("http://www.voanews.com/section/africa/2204.html");
+		add("http://www.voanews.com/section/asia/2205.html");
+		add("http://www.voanews.com/section/middle_east/2206.html");
+		add("http://www.voanews.com/section/europe/2210.html");
+		add("http://www.voanews.com/section/americas/2211.html");
+		add("http://www.voanews.com/section/science-and-technology/2214.html");
+		add("http://www.voanews.com/section/health/2215.html");
+		add("http://www.voanews.com/section/arts_and_entertainment/2216.html");
+		add("http://www.voanews.com/section/economy_and_business/2217.html");
 	}
 	};
 	
@@ -93,8 +84,6 @@ public class TimeCrawler extends CrawlerParent{
         config.setCrawlStorageFolder(Config.crawlStorageFolder);     
         config.setResumableCrawling(false);
         config.setMaxDepthOfCrawling(3);
-        config.setPolitenessDelay(3600);
-        config.setUserAgentString("Mozilla/5.0 (Windows NT 6.1; rv:25.0) Gecko/20100101 Firefox/25.0");
         /*
          * Instantiate the controller for this crawl.
          */
@@ -152,7 +141,7 @@ public class TimeCrawler extends CrawlerParent{
 			System.out.println("Number of outgoing links: " + links.size());
 
 			Content content = parse(html);
-			content.setUrl(url);
+			content.setUrl(url);			
 			save(content, PATH_RESULT, url);
 		}
 	}
@@ -161,51 +150,31 @@ public class TimeCrawler extends CrawlerParent{
 			Content content = new Content();
 			content.setHtml(html);
 			Document doc = Jsoup.parse(html);
-		
-			Elements contents = doc.select("p");
-			Iterator<Element> it = contents.iterator();
-			String cString = "";
-			while (it.hasNext()){
-				Element c = it.next();
-				String temp = c.text();
-				Elements cc = c.getElementsByAttribute("class");
-				if (cc.isEmpty() && !temp.contains("Follow @TIME")){
-					cString += " " + temp;
-				}								
-			}
-			content.setText(cString);
+					
+			String date = doc.select("p.article_date").first().text();
+			String text = doc.select("div.zoomMe").first().text();
+			content.setText(text);
 			
-			Element title = doc.select("h1.entry-title").first();
+			Element title = doc.select("title").first();
 			content.setTitle(title != null ? title.text() : null);
 
 			
-			Element author = doc.select("span.entry-byline").first();
-			if (author != null){
-				String authorString = author.text();
-				if (authorString != null && authorString.startsWith("By ")){
-					authorString = authorString.substring(3);
-				}			
-				content.setAuthor(authorString); 				
-			}
-							
-			Element date = doc.select("span.entry-date").first();
-			if (date != null){
-				String dateString = date.text();
-//				"Monday, Jan 15, 2007";
-				if (dateString != null && !dateString.trim().isEmpty()){
-					try{
-						dateString = dateString.replace(".", "");
-						DateTimeFormatter formatter = DateTimeFormat.forPattern("E, MMM d, yyyy");
-						DateTime dt = DateTime.parse(dateString, formatter);
-						content.setTimestamp(dt.getMillis()/1000);	
-					}catch(IllegalArgumentException e){
-						
-					}
-				}
-			}
+			content.setAuthor(doc.select("meta[name=Author]").attr("content"));
+
+			if (text != null && text.contains(" — ")){
+				String[] parts = text.split(" — ");
+				if (parts.length == 2){
+					content.setPlace(parts[0]);
+				}						
+			}		
 			
+			if (date != null){
+				DateTimeFormatter formatter = DateTimeFormat.forPattern("MMM d, yyyy");
+				DateTime dt = DateTime.parse(date, formatter);
+				content.setTimestamp(dt.getMillis() / 1000);								
+			}
+										
 			return content;
 		}
-
 
 }

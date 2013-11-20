@@ -16,6 +16,7 @@ import org.jsoup.select.Elements;
 
 import com.mbcu.nc.json.Content;
 import com.mbcu.nc.main.Config;
+import com.mbcu.nc.utils.GsonUtils;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
@@ -40,6 +41,7 @@ public class UsaTodayCrawler extends CrawlerParent{
 		
 		add("usatoday.com/big-page");
 		add("usatoday.com/media");
+		add("usatoday.com/videos");
 		add("usatoday.com/puzzles");
 		add("service.usatoday.com");
 		add("usatoday.com/shop");
@@ -59,7 +61,8 @@ public class UsaTodayCrawler extends CrawlerParent{
 		add("developer.usatoday.com");
 		add("usatoday.com/about-usaweekend");
 		add("usatoday.com/educate");
-		
+		add("usatoday.com/picture-gallery");
+		add("usatoday.com/weather");
 		
 	
 	}
@@ -167,52 +170,65 @@ public class UsaTodayCrawler extends CrawlerParent{
 			System.out.println("Number of outgoing links: " + links.size());
 
 			Content content = parse(html);
-			save(content, PATH_RESULT, url);
+			content.setUrl(url);
+			save(content, PATH_RESULT, url);	
 		}
 	}
 	    
 	private Content parse(String html) {
 		Content content = new Content();
+		content.setHtml(html);
 		Document doc = Jsoup.parse(html);
 		
 		Elements contents = doc.select("p");
+		
+		
+		
 		Iterator<Element> it = contents.iterator();
 		String cString = "";
 		while (it.hasNext()) {
-			Element c = it.next();
-			String ptemp = c.select("p").text();
-			String[] split1 = ptemp.split("—"); // first regex
-			if (split1.length > 1 && split1[0].length() < 25){ // estimate of the longest place string
-				int l = split1[0].length();
-				int nCaps = 0;
-				for (int i = 0; i < l; i++){
-					if (Character.isUpperCase(split1[0].charAt(i))){
-						nCaps++;
-						if (nCaps > l / 2){
-							content.setPlace(split1[0].trim());
-							break;
-						}
-					}				
-				}
-			}
-			String[] split2 = ptemp.split("--"); // second regex
-			if (split2.length > 1 && split2[0].length() < 25){ // estimate of the longest place string
-				int l = split2[0].length();
-				int nCaps = 0;
-				for (int i = 0; i < l; i++){
-					if (Character.isUpperCase(split2[0].charAt(i))){
-						nCaps++;
-						if (nCaps > l / 2){
-							content.setPlace(split2[0].trim());
-							break;
-						}
-					}				
-				}
-			}
+			Element c = it.next();		
+			/*
+			 * Assuming the content is wrapped in p tags that have no attributes
+			 */
+			Elements cc = c.getElementsByAttribute("class");
 			
-			cString += " " + ptemp;
+			if (cc.isEmpty())
+			{
+				String ptemp = c.ownText();
+				String[] split1 = ptemp.split("—"); // first regex
+				if (split1.length > 1 && split1[0].length() < 25){ // estimate of the longest place string
+					int l = split1[0].length();
+					int nCaps = 0;
+					for (int i = 0; i < l; i++){
+						if (Character.isUpperCase(split1[0].charAt(i))){
+							nCaps++;
+							if (nCaps > l / 2){
+								content.setPlace(split1[0].trim());
+								break;
+							}
+						}				
+					}
+				}
+				String[] split2 = ptemp.split("--"); // second regex
+				if (split2.length > 1 && split2[0].length() < 25){ // estimate of the longest place string
+					int l = split2[0].length();
+					int nCaps = 0;
+					for (int i = 0; i < l; i++){
+						if (Character.isUpperCase(split2[0].charAt(i))){
+							nCaps++;
+							if (nCaps > l / 2){
+								content.setPlace(split2[0].trim());
+								break;
+							}
+						}				
+					}
+				}
+				
+				cString += " " + ptemp;				
+			}
 		}
-		content.setHtml(cString);		
+		content.setText(cString);		
 
 		Element title = doc.select("h1[itemprop=headline]").first();
 		if (title != null){

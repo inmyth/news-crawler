@@ -63,6 +63,7 @@ public class ReutersCrawler extends CrawlerParent {
 		add("reuters.com/finance/funds");
 		add("reuters.com/finance/markets/indices");
 		add("reuters.com/sectors");
+		add("reuters.com/video");
 	}
 	};
 	
@@ -86,7 +87,7 @@ public class ReutersCrawler extends CrawlerParent {
 		
 		add("http://www.reuters.com/finance/deals/mergers");
 
-
+		add("http://blogs.reuters.com/breakingviews/");
 		add("http://www.reuters.com/finance/markets/dividends");
 		add("http://www.reuters.com/news/world");
 		add("http://www.reuters.com/news/us");
@@ -483,12 +484,14 @@ public class ReutersCrawler extends CrawlerParent {
 			System.out.println("Number of outgoing links: " + links.size());
 
 			Content content = parse(html);
+			content.setUrl(url);
 			save(content, PATH_RESULT, url);
 		}
 	}
 	    
 	private Content parse(String html) {
 		Content content = new Content();
+		content.setHtml(html);
 		Document doc = Jsoup.parse(html);
 		
 		Elements contents = doc.select("p");
@@ -496,9 +499,26 @@ public class ReutersCrawler extends CrawlerParent {
 		String cString = "";
 		while (it.hasNext()) {
 			Element c = it.next();
-			cString += c.select("p").text();
+			String temp = c.select("p").text();
+			if (temp.equals("Back to top") // these are end of story cues 
+					|| temp.contains("Thomson Reuters is the world's largest international multimedia news agency, providing investing news, world news, business news,")
+					|| temp.contains("list of exchanges and delays, please click here")
+					|| temp.contains("Follow me on Twitter")					
+					|| temp.contains("Our day's top images, in-depth photo essays and offbeat slices of life")
+					|| temp.contains("Reuters Breakingviews is the world's leading source of agenda-setting financial insight")
+					|| temp.contains("Breakingviews has published a selection of books for purchase and download")
+					|| temp.equals("LATEST TITLES")
+					|| temp.contains("(Additional reporting by")
+					|| temp.contains("Our top photos from the past 24 hours")
+					)
+			{
+				break;
+			}else{
+				cString += " " + c.select("p").text();
+			}
+			
 		}
-		content.setHtml(cString);
+		content.setText(cString);
 		
 
 		content.setTitle(doc.select("META[property=og:title]").attr("content"));

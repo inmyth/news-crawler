@@ -209,12 +209,14 @@ public class ChicagoTribuneCrawler extends CrawlerParent {
 			System.out.println("Number of outgoing links: " + links.size());
 
 			Content content = parse(html);
+			content.setUrl(url);
 			save(content, PATH_RESULT, url);
 		}
 	}
 
 	private Content parse(String html) {
 		Content content = new Content();
+		content.setHtml(html);
 		Document doc = Jsoup.parse(html);
 		Elements byLines = doc.select("div.byline");
 		if (byLines != null && byLines.size() > 1) {
@@ -227,7 +229,7 @@ public class ChicagoTribuneCrawler extends CrawlerParent {
 		}
 
 		Element story = doc.select("div#story-body-text").first();
-		content.setHtml(story != null ? story.text() : null);
+		content.setText(story != null ? story.text() : null);
 		Element title = doc.select("h1").first();
 		content.setTitle(title != null ? title.ownText() : null);
 
