@@ -23,28 +23,7 @@ public class CrawlerParent extends WebCrawler {
 					+ "|xml|ico|cssx"
 					+ "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
 	
-	public void makeDir(String path){
-		File file = new File(path);
-		if (!file.exists()) {
-			if (file.mkdir()) {
-				System.out.println("Directory is created!");
-			} else {
-				System.out.println("Failed to create directory!");
-			}
-		}		
-	}
-	
-	public static final void save(Content content, String path, String url){
-		try {		
-			Writer out = new BufferedWriter(new OutputStreamWriter( new FileOutputStream(path + sanitize(url) + ".txt"), "UTF-8"));
-			out.write(GsonUtils.toJson(content));
-			out.close();			
-			System.out.println("Done");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
+
 
 	private static String PERCENT = "%";
 	private static String SINGLE_QUOTE = "'";

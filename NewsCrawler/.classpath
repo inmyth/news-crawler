@@ -3,27 +3,26 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="con" path="com.amazonaws.eclipse.sdk.AWS_JAVA_SDK"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/crawler4j-3.5/crawler4j-3.5.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/crawler4j-3.5-dependencies/apache-mime4j-core-0.7.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/crawler4j-3.5-dependencies/apache-mime4j-dom-0.7.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/crawler4j-3.5-dependencies/asm-3.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/crawler4j-3.5-dependencies/boilerpipe-1.1.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/crawler4j-3.5-dependencies/commons-codec-1.6.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/crawler4j-3.5-dependencies/commons-compress-1.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/crawler4j-3.5-dependencies/commons-logging-1.1.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/crawler4j-3.5-dependencies/geronimo-stax-api_1.0_spec-1.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/crawler4j-3.5-dependencies/httpclient-4.2.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/crawler4j-3.5-dependencies/httpcore-4.2.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/crawler4j-3.5-dependencies/je-4.0.92.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/crawler4j-3.5-dependencies/log4j-1.2.14.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/crawler4j-3.5-dependencies/metadata-extractor-2.4.0-beta-1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/crawler4j-3.5-dependencies/tagsoup-1.2.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/crawler4j-3.5-dependencies/tika-core-1.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/crawler4j-3.5-dependencies/tika-parsers-1.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/google-gson-2.2.4/gson-2.2.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/jsoup-1.7.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/joda-time-2.3-dist/joda-time-2.3/joda-time-2.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/joda-time-2.3-dist/joda-time-2.3/joda-time-2.3-javadoc.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Martin/Downloads/commons-io-2.4-bin/commons-io-2.4/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/crawler4j-3.5/crawler4j-3.5.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/crawler4j-3.5-dependencies/apache-mime4j-core-0.7.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/crawler4j-3.5-dependencies/apache-mime4j-dom-0.7.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/crawler4j-3.5-dependencies/asm-3.1.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/crawler4j-3.5-dependencies/boilerpipe-1.1.0.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/crawler4j-3.5-dependencies/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/crawler4j-3.5-dependencies/commons-compress-1.3.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/crawler4j-3.5-dependencies/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/crawler4j-3.5-dependencies/geronimo-stax-api_1.0_spec-1.0.1.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/crawler4j-3.5-dependencies/httpclient-4.2.3.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/crawler4j-3.5-dependencies/httpcore-4.2.2.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/crawler4j-3.5-dependencies/je-4.0.92.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/crawler4j-3.5-dependencies/log4j-1.2.14.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/crawler4j-3.5-dependencies/metadata-extractor-2.4.0-beta-1.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/crawler4j-3.5-dependencies/tagsoup-1.2.1.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/crawler4j-3.5-dependencies/tika-core-1.0.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/crawler4j-3.5-dependencies/tika-parsers-1.0.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/google-gson-2.2.4/gson-2.2.4.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/joda-time-2.3-dist/joda-time-2.3/joda-time-2.3.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/jsoup-1.7.3/jsoup-1.7.3.jar"/>
+	<classpathentry kind="lib" path="M:/code/jar/jsoup-1.7.3/jsoup-1.7.3-javadoc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

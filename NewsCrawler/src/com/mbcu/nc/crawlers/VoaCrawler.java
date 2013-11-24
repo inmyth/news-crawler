@@ -35,11 +35,12 @@ import edu.uci.ics.crawler4j.url.WebURL;
 public class VoaCrawler extends CrawlerParent {
 	
 	public static final String HOST = "www.voanews.com";
-	public static final String PATH_RESULT = "M:\\data\\res\\voa\\";
+	public static final String PATH_RESULT = Config.PATH_BASE + "voa\\";
 	
 	@Override
 	public void onStart() {
 		makeDir(PATH_RESULT);
+		
 	}
 	
 	static Set<String> ignores = new HashSet<String>(){{

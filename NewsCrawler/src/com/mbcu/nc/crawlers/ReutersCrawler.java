@@ -22,6 +22,7 @@ import org.jsoup.select.Elements;
 
 import com.mbcu.nc.json.Content;
 import com.mbcu.nc.main.Config;
+import com.mbcu.nc.utils.FileUtils;
 import com.mbcu.nc.utils.GsonUtils;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
@@ -36,12 +37,8 @@ import edu.uci.ics.crawler4j.url.WebURL;
 public class ReutersCrawler extends CrawlerParent {
 	
 	public static final String HOST = "reuters.com";
-	public static final String PATH_RESULT = "M:\\data\\res\\reuters\\";
-	
-	@Override
-	public void onStart() {
-		makeDir(PATH_RESULT);
-	}
+	public static final String FOLDER = Config.PATH_BASE + "reuters\\";
+		
 	
 	static Set<String> ignores = new HashSet<String>(){{
 		add("reuters.com/news/video");
@@ -455,7 +452,7 @@ public class ReutersCrawler extends CrawlerParent {
 			}			
 		}
 			
-		File f = new File(PATH_RESULT + sanitize(href) + ".txt");
+		File f = new File(FileUtils.getHtmlFilePath(FOLDER, href));
 		if (f.exists())
 			return false;
 		
@@ -483,9 +480,8 @@ public class ReutersCrawler extends CrawlerParent {
 			System.out.println("Html length: " + html.length());
 			System.out.println("Number of outgoing links: " + links.size());
 
-			Content content = parse(html);
-			content.setUrl(url);
-			save(content, PATH_RESULT, url);
+			String path = FileUtils.getHtmlFilePath(FOLDER, url);
+			FileUtils.saveHtml(path, html);
 		}
 	}
 	    
