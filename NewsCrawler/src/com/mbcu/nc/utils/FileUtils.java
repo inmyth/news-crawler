@@ -33,6 +33,11 @@ public class FileUtils {
 	private final static String PREFIX_NODE  = "node";
 	private final static int BUFFER = 8192;
 	
+	/**
+	 * Get the node of hashed url
+	 * @param url The url
+	 * @return hashed url as {@link String}
+	 */
 	public static String getNode(String url){
 		int hc = url.hashCode();
 		hc = (hc < 0 ? -hc : hc); // Make sure it's positive
@@ -48,6 +53,11 @@ public class FileUtils {
 		return hashstr;
 	}
 		
+	/**
+	 * Get the batch of hashed url
+	 * @param url The url
+	 * @return hashed url as {@link String}
+	 */
 	public static String getBatch(String url){		
 		int hc = url.hashCode();
 		hc = (hc < 0 ? -hc : hc); 
@@ -62,13 +72,23 @@ public class FileUtils {
 		return hashstr;
 	}
 	
+	/**
+	 * Return the path of gzipped file of html
+	 * @param corpFolder The corpus root folder
+	 * @param url The url of the html
+	 * @return Path of the gzipped html
+	 */
 	public static String getHtmlFilePath(String corpFolder, String url){
 		String batchFolder = PREFIX_BATCH + getBatch(url);
 		String file = PREFIX_NODE + getNode(url);		
-		return (corpFolder + "//" + batchFolder + "//" +  file + ".html.z");
+		return (corpFolder + File.separator + batchFolder + File.separator +  file + ".html.z");
 	}
 	
-	
+	/**
+	 * Create a {@link File} with folder structure
+	 * @param path The target path
+	 * @return
+	 */
 	public static boolean makeFile(String path){
 		boolean res = false;
 		File file = new File(path);
@@ -84,6 +104,11 @@ public class FileUtils {
 		return res;
 	}
 	
+	/**
+	 * Compress raw html into zipped file
+	 * @param path The path for target file
+	 * @param html The raw html content
+	 */
 	public static void gzipHtml(String path, String html){
 		
 		if (makeFile(path)){
@@ -107,6 +132,11 @@ public class FileUtils {
 		}	
 	}		
 	
+	/**
+	 * Save the extracted html into txt file
+	 * @param path The taret txt file
+	 * @param content The content
+	 */
 	public static void saveTxt(String path, String content){
 		BufferedWriter bw = null;
 		try{
@@ -132,6 +162,12 @@ public class FileUtils {
 		
 	}
 	
+	/**
+	 * Recursively delete files with ext extension
+	 * @param path Root folder where recursive delete starts
+	 * @param ext The file extension of to be deleted files
+	 * @return Number of deleted files
+	 */
 	public static int deleteRecursive(String path, String ext){
 		int count = 0;
 		ArrayList<File> batchList = FileUtils.listFolders(path);
@@ -146,6 +182,11 @@ public class FileUtils {
 		return count;
 	}
 	
+	/**
+	 * Decompress gzipped html back into {@link String}
+	 * @param path Path of target file
+	 * @return raw html from the zip
+	 */
 	public static String gunzipHtml(String path){
 		String res = "";		
 		GZIPInputStream gzis = null;
@@ -179,7 +220,11 @@ public class FileUtils {
 		
 	}
 	
-	
+	/**
+	 * List folders inside of path
+	 * @param path the path
+	 * @return {@link List} of folders as {@link File} 
+	 */
 	public static ArrayList<File> listFolders(String path) {
 		ArrayList<File> res = new ArrayList<File>();
 	    File directory = new File(path);
