@@ -38,8 +38,8 @@ public class Crawler {
 //		CrawlController crawlTime = Time.buildController();
 //		crawlTime.startNonBlocking(Time.class, numberOfCrawlers);
 		
-		CrawlController huffPoCrawler = HuffPo.buildController();
-		huffPoCrawler.startNonBlocking(HuffPo.class, numberOfCrawlers);
+//		CrawlController huffPoCrawler = HuffPo.buildController();
+//		huffPoCrawler.startNonBlocking(HuffPo.class, numberOfCrawlers);
 		
 //		CrawlController reutersController = Reuters.buildController();
 //		reutersController.startNonBlocking(Reuters.class, 7);
