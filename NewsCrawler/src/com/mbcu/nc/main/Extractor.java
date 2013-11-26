@@ -20,15 +20,10 @@ import com.mbcu.nc.utils.FileUtils;
 
 public class Extractor {
 
+	/*
+	 * Demonstration of how to extract / parse text from gzipped html
+	 */
 	public static void main(String[] args) {
-//		extractor(new Reuters(), Reuters.FOLDER);
-//		extractor(new Voa(), Voa.FOLDER);
-//		extractor(new UsaToday(), UsaToday.FOLDER);
-//		extractor(new Time(), Time.FOLDER);
-//		FileUtils.deleteRecursive(Time.FOLDER, ".txt");
-//		extractor(new Cnn(), Cnn.FOLDER);
-//		extractor(new ChicagoTribune(), ChicagoTribune.FOLDER);
-
 		extractor(new HuffPo(), HuffPo.FOLDER);
 		System.out.print("Done");
 	}

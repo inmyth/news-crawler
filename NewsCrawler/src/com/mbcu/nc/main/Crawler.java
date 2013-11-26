@@ -25,6 +25,9 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class Crawler {
 
+	/*
+	 * Demonstration of how to crawl a website 
+	 */
 	public static void main(String[] args) throws Exception {	
 		
 		int numberOfCrawlers = 7;

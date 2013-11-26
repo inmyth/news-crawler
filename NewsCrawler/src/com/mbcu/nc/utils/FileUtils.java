@@ -40,7 +40,7 @@ public class FileUtils {
 	 */
 	public static String getNode(String url){
 		int hc = url.hashCode();
-		hc = (hc < 0 ? -hc : hc); // Make sure it's positive
+		hc = Math.abs(hc); // Make sure it's positive
 		hc = (hc % 100000000); //Eight zeroes, maximum value is 99,999,999
 		 
 		// Now to get the STRING form, pad with leading zeroes:
