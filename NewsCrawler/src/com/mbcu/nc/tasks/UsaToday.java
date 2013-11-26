@@ -1,6 +1,7 @@
-package com.mbcu.nc.crawlers;
+package com.mbcu.nc.tasks;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.jsoup.select.Elements;
 
 import com.mbcu.nc.json.Content;
 import com.mbcu.nc.main.Config;
+import com.mbcu.nc.utils.FileUtils;
 import com.mbcu.nc.utils.GsonUtils;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
@@ -27,16 +29,11 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import edu.uci.ics.crawler4j.url.WebURL;
 
-public class UsaTodayCrawler extends CrawlerParent{
+public class UsaToday extends Base{
 
 	public static final String HOST = "usatoday.com";
-	public static final String PATH_RESULT = "M:\\data\\res\\usatoday\\";
-	
-	@Override
-	public void onStart() {
-		makeDir(PATH_RESULT);
-	}
-	
+	public static final String FOLDER = Config.PATH_BASE + "usatoday" + File.separator;
+
 	static Set<String> ignores = new HashSet<String>(){{
 		
 		add("usatoday.com/big-page");
@@ -63,8 +60,6 @@ public class UsaTodayCrawler extends CrawlerParent{
 		add("usatoday.com/educate");
 		add("usatoday.com/picture-gallery");
 		add("usatoday.com/weather");
-		
-	
 	}
 	};
 	
@@ -96,10 +91,7 @@ public class UsaTodayCrawler extends CrawlerParent{
 		add("http://www.usatoday.com/travel/flights/");
 		add("http://www.usatoday.com/travel/cruises/");
 		add("http://www.usatoday.com/travel/deals/");
-		add("http://traveltips.usatoday.com/");
-		
-		
-		
+		add("http://traveltips.usatoday.com/");				
 	}
 	};
 	
@@ -141,7 +133,7 @@ public class UsaTodayCrawler extends CrawlerParent{
 			}			
 		}
 			
-		File f = new File(PATH_RESULT + sanitize(href) + ".txt");
+		File f = new File(FileUtils.getHtmlFilePath(FOLDER, href));
 		if (f.exists())
 			return false;
 		
@@ -169,13 +161,38 @@ public class UsaTodayCrawler extends CrawlerParent{
 			System.out.println("Html length: " + html.length());
 			System.out.println("Number of outgoing links: " + links.size());
 
-			Content content = parse(html);
-			content.setUrl(url);
-			save(content, PATH_RESULT, url);	
+			String path = FileUtils.getHtmlFilePath(FOLDER, url);
+			FileUtils.gzipHtml(path, html);
 		}
 	}
 	    
-	private Content parse(String html) {
+	@Override
+	public List<String> extract(String html) {
+		ArrayList<String> res = new ArrayList<String>();
+		
+		Document doc = Jsoup.parse(html);		
+		Elements contents = doc.select("p");
+	
+		Iterator<Element> it = contents.iterator();
+		
+		while (it.hasNext()) {
+			Element c = it.next();		
+			/*
+			 * Assuming the content is wrapped in p tags that have no attributes
+			 */
+			Elements cc = c.getElementsByAttribute("class");
+			
+			if (cc.isEmpty())
+			{
+				res.add(c.ownText());		
+			}
+		}
+
+		return res;
+	}
+	
+	@Override
+	public Content extract2Json(String html) {
 		Content content = new Content();
 		content.setHtml(html);
 		Document doc = Jsoup.parse(html);

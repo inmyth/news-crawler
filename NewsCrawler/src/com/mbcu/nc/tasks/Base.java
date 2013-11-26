@@ -1,4 +1,4 @@
-package com.mbcu.nc.crawlers;
+package com.mbcu.nc.tasks;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import com.mbcu.nc.json.Content;
@@ -14,7 +15,7 @@ import com.mbcu.nc.utils.GsonUtils;
 
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 
-public class CrawlerParent extends WebCrawler {
+public abstract class Base extends WebCrawler {
 
 	final static Pattern FILTERS = Pattern
 			.compile(".*(\\.(css|js|bmp|gif|jpe?g"
@@ -34,5 +35,9 @@ public class CrawlerParent extends WebCrawler {
 		url = url.replaceAll("\\?", SINGLE_QUOTE);
 		return url;
 	}
+	
+	public abstract List<String> extract(String html);
+	
+	public abstract Content extract2Json(String html);
 
 }

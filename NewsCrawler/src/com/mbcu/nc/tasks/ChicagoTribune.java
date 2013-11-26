@@ -1,4 +1,4 @@
-package com.mbcu.nc.crawlers;
+package com.mbcu.nc.tasks;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,6 +24,7 @@ import org.jsoup.select.Elements;
 
 import com.mbcu.nc.json.Content;
 import com.mbcu.nc.main.Config;
+import com.mbcu.nc.utils.FileUtils;
 import com.mbcu.nc.utils.GsonUtils;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
@@ -36,14 +37,11 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import edu.uci.ics.crawler4j.url.WebURL;
 
-public class ChicagoTribuneCrawler extends CrawlerParent {
+public class ChicagoTribune extends Base {
 	public static final String HOST = "chicagotribune.com";
-	public static final String PATH_RESULT = "M:\\data\\res\\chitrib\\";
+	public static final String FOLDER = Config.PATH_BASE + "chitrib" + File.separator;
 
-	@Override
-	public void onStart() {
-		makeDir(PATH_RESULT);
-	}
+
 
 	static Set<String> ignores = new HashSet<String>() {
 		{
@@ -152,7 +150,7 @@ public class ChicagoTribuneCrawler extends CrawlerParent {
 		CrawlConfig config = new CrawlConfig();
 		config.setCrawlStorageFolder(Config.crawlStorageFolder);
 		config.setResumableCrawling(false);
-		config.setMaxDepthOfCrawling(2);
+		config.setMaxDepthOfCrawling(3);
 		/*
 		 * Instantiate the controller for this crawl.
 		 */
@@ -180,7 +178,7 @@ public class ChicagoTribuneCrawler extends CrawlerParent {
 			}			
 		}
 			
-		File f = new File(PATH_RESULT + sanitize(href) + ".txt");
+		File f = new File(FileUtils.getHtmlFilePath(FOLDER, href));
 		if (f.exists())
 			return false;
 		
@@ -208,13 +206,25 @@ public class ChicagoTribuneCrawler extends CrawlerParent {
 			System.out.println("Html length: " + html.length());
 			System.out.println("Number of outgoing links: " + links.size());
 
-			Content content = parse(html);
-			content.setUrl(url);
-			save(content, PATH_RESULT, url);
+			String path = FileUtils.getHtmlFilePath(FOLDER, url);
+			FileUtils.gzipHtml(path, html);
 		}
 	}
+	
+	@Override
+	public List<String> extract(String html) {
+		ArrayList<String> res = new ArrayList<String>();	
+		Document doc = Jsoup.parse(html);
+		Element story = doc.select("div#story-body-text").first();
+		if (story != null){
+			res.add(story.text());
+		}
 
-	private Content parse(String html) {
+		return res;
+	}
+
+	@Override	
+	public Content extract2Json(String html) {
 		Content content = new Content();
 		content.setHtml(html);
 		Document doc = Jsoup.parse(html);

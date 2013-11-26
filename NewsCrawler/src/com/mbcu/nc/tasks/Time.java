@@ -1,4 +1,4 @@
-package com.mbcu.nc.crawlers;
+package com.mbcu.nc.tasks;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -23,6 +24,7 @@ import org.jsoup.select.Elements;
 
 import com.mbcu.nc.json.Content;
 import com.mbcu.nc.main.Config;
+import com.mbcu.nc.utils.FileUtils;
 import com.mbcu.nc.utils.GsonUtils;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
@@ -34,16 +36,11 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import edu.uci.ics.crawler4j.url.WebURL;
 
-public class TimeCrawler extends CrawlerParent{
+public class Time extends Base{
 	
 	public static final String HOST = "time.com";
-	public static final String PATH_RESULT = "M:\\data\\res\\time\\";
-	
-	@Override
-	public void onStart() {
-		makeDir(PATH_RESULT);
-	}
-	
+	public static final String FOLDER = Config.PATH_BASE + "time" + File.separator;
+		
 	static Set<String> ignores = new HashSet<String>(){{
 		add("content.time.com/time/rss");
 		add("content.time.com/time/photogallery");
@@ -122,7 +119,7 @@ public class TimeCrawler extends CrawlerParent{
 			}			
 		}
 			
-		File f = new File(PATH_RESULT + sanitize(href) + ".txt");
+		File f = new File(FileUtils.getHtmlFilePath(FOLDER, href));
 		if (f.exists())
 			return false;
 		
@@ -132,7 +129,6 @@ public class TimeCrawler extends CrawlerParent{
 	
 	@Override
 	public void visit(Page page) {
-
 		String url = page.getWebURL().getURL();
 		for (String s : seeds){
 			if (url.equals(s)){
@@ -151,61 +147,92 @@ public class TimeCrawler extends CrawlerParent{
 			System.out.println("Html length: " + html.length());
 			System.out.println("Number of outgoing links: " + links.size());
 
-			Content content = parse(html);
-			content.setUrl(url);
-			save(content, PATH_RESULT, url);
+			String path = FileUtils.getHtmlFilePath(FOLDER, url);
+			FileUtils.gzipHtml(path, html);
 		}
 	}
 	    
-	    private Content parse(String html){
-			Content content = new Content();
-			content.setHtml(html);
-			Document doc = Jsoup.parse(html);
-		
-			Elements contents = doc.select("p");
-			Iterator<Element> it = contents.iterator();
-			String cString = "";
-			while (it.hasNext()){
-				Element c = it.next();
-				String temp = c.text();
-				Elements cc = c.getElementsByAttribute("class");
-				if (cc.isEmpty() && !temp.contains("Follow @TIME")){
-					cString += " " + temp;
-				}								
-			}
-			content.setText(cString);
+	@Override
+	public List<String> extract(String html) {
+		ArrayList<String> res = new ArrayList<String>();
+		Document doc = Jsoup.parse(html);
+		Elements contents = doc.select("p");
+		Iterator<Element> it = contents.iterator();
+		while (it.hasNext()) {
+			Element c = it.next();
+			String temp = c.text();
+			Elements cc = c.getElementsByAttribute("class");
 			
-			Element title = doc.select("h1.entry-title").first();
-			content.setTitle(title != null ? title.text() : null);
+			Element parent = c.parent();
+			if (!temp.trim().isEmpty() &&				
+				!parent.hasClass("fyre-comment") &&
+				cc.isEmpty() && 
+				!temp.contains("Follow @TIME")
+				)
+			{
+				res.add(temp);
+			}
+			
+		}
+		return res;
+	}
+	
+	@Override
+	public Content extract2Json(String html) {
+		Content content = new Content();
+		content.setHtml(html);
+		Document doc = Jsoup.parse(html);
 
-			
-			Element author = doc.select("span.entry-byline").first();
-			if (author != null){
-				String authorString = author.text();
-				if (authorString != null && authorString.startsWith("By ")){
-					authorString = authorString.substring(3);
-				}			
-				content.setAuthor(authorString); 				
+		Elements contents = doc.select("p");
+		Iterator<Element> it = contents.iterator();
+		String cString = "";
+		while (it.hasNext()) {
+			Element c = it.next();
+			String temp = c.text();
+			Elements cc = c.getElementsByAttribute("class");
+			Element parent = c.parent();
+			if (!temp.trim().isEmpty() &&				
+				!parent.hasClass("fyre-comment") &&
+				cc.isEmpty() && 
+				!temp.contains("Follow @TIME")
+				)
+			{
+				cString += " " + temp;
 			}
-							
-			Element date = doc.select("span.entry-date").first();
-			if (date != null){
-				String dateString = date.text();
-//				"Monday, Jan 15, 2007";
-				if (dateString != null && !dateString.trim().isEmpty()){
-					try{
-						dateString = dateString.replace(".", "");
-						DateTimeFormatter formatter = DateTimeFormat.forPattern("E, MMM d, yyyy");
-						DateTime dt = DateTime.parse(dateString, formatter);
-						content.setTimestamp(dt.getMillis()/1000);	
-					}catch(IllegalArgumentException e){
-						
-					}
+		}
+		content.setText(cString);
+
+		Element title = doc.select("h1.entry-title").first();
+		content.setTitle(title != null ? title.text() : null);
+
+		Element author = doc.select("span.entry-byline").first();
+		if (author != null) {
+			String authorString = author.text();
+			if (authorString != null && authorString.startsWith("By ")) {
+				authorString = authorString.substring(3);
+			}
+			content.setAuthor(authorString);
+		}
+
+		Element date = doc.select("span.entry-date").first();
+		if (date != null) {
+			String dateString = date.text();
+			// "Monday, Jan 15, 2007";
+			if (dateString != null && !dateString.trim().isEmpty()) {
+				try {
+					dateString = dateString.replace(".", "");
+					DateTimeFormatter formatter = DateTimeFormat
+							.forPattern("E, MMM d, yyyy");
+					DateTime dt = DateTime.parse(dateString, formatter);
+					content.setTimestamp(dt.getMillis() / 1000);
+				} catch (IllegalArgumentException e) {
+
 				}
 			}
-			
-			return content;
 		}
+
+		return content;
+	}
 
 
 }

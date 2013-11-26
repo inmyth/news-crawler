@@ -1,4 +1,4 @@
-package com.mbcu.nc.crawlers;
+package com.mbcu.nc.tasks;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -34,11 +35,12 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import edu.uci.ics.crawler4j.url.WebURL;
 
-public class ReutersCrawler extends CrawlerParent {
+public class Reuters extends Base {
 	
 	public static final String HOST = "reuters.com";
-	public static final String FOLDER = Config.PATH_BASE + "reuters\\";
+	public static final String FOLDER = Config.PATH_BASE + "reuters" + File.separator;
 		
+	
 	
 	static Set<String> ignores = new HashSet<String>(){{
 		add("reuters.com/news/video");
@@ -481,11 +483,43 @@ public class ReutersCrawler extends CrawlerParent {
 			System.out.println("Number of outgoing links: " + links.size());
 
 			String path = FileUtils.getHtmlFilePath(FOLDER, url);
-			FileUtils.saveHtml(path, html);
+			FileUtils.gzipHtml(path, html);
 		}
 	}
 	    
-	private Content parse(String html) {
+	
+	public List<String> extract(String html) {
+		ArrayList<String> res = new ArrayList<String>();
+		Document doc = Jsoup.parse(html);
+		
+		Elements contents = doc.select("p");
+		Iterator<Element> it = contents.iterator();
+		while (it.hasNext()) {
+			Element c = it.next();
+			String temp = c.select("p").text();
+			if (temp.equals("Back to top") // these are end of story cues 
+					|| temp.contains("Thomson Reuters is the world's largest international multimedia news agency, providing investing news, world news, business news,")
+					|| temp.contains("list of exchanges and delays, please click here")
+					|| temp.contains("Follow me on Twitter")					
+					|| temp.contains("Our day's top images, in-depth photo essays and offbeat slices of life")
+					|| temp.contains("Reuters Breakingviews is the world's leading source of agenda-setting financial insight")
+					|| temp.contains("Breakingviews has published a selection of books for purchase and download")
+					|| temp.equals("LATEST TITLES")
+					|| temp.contains("(Additional reporting by")
+					|| temp.contains("Our top photos from the past 24 hours")
+					)
+			{
+				break;
+			}else{
+				res.add(c.text());
+			}
+			
+		}
+		return res;
+	}
+	
+	@Override
+	public Content extract2Json(String html) {
 		Content content = new Content();
 		content.setHtml(html);
 		Document doc = Jsoup.parse(html);
@@ -510,7 +544,7 @@ public class ReutersCrawler extends CrawlerParent {
 			{
 				break;
 			}else{
-				cString += " " + c.select("p").text();
+				cString += " " + c.text();
 			}
 			
 		}

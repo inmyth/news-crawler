@@ -6,15 +6,15 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
-import com.mbcu.nc.crawlers.BloombergCrawler;
-import com.mbcu.nc.crawlers.ChicagoTribuneCrawler;
-import com.mbcu.nc.crawlers.CnnCrawler;
-import com.mbcu.nc.crawlers.CrawlerParent;
-import com.mbcu.nc.crawlers.HuffPoCrawler;
-import com.mbcu.nc.crawlers.ReutersCrawler;
-import com.mbcu.nc.crawlers.TimeCrawler;
-import com.mbcu.nc.crawlers.UsaTodayCrawler;
-import com.mbcu.nc.crawlers.VoaCrawler;
+import com.mbcu.nc.tasks.Bloomberg;
+import com.mbcu.nc.tasks.ChicagoTribune;
+import com.mbcu.nc.tasks.Cnn;
+import com.mbcu.nc.tasks.Base;
+import com.mbcu.nc.tasks.HuffPo;
+import com.mbcu.nc.tasks.Reuters;
+import com.mbcu.nc.tasks.Time;
+import com.mbcu.nc.tasks.UsaToday;
+import com.mbcu.nc.tasks.Voa;
 import com.mbcu.nc.utils.FileUtils;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
@@ -29,30 +29,32 @@ public class Crawler {
 		
 		int numberOfCrawlers = 7;
 
-//		CrawlController crawlChiTrib = ChicagoTribuneCrawler.buildController();
-//        crawlChiTrib.startNonBlocking(ChicagoTribuneCrawler.class, numberOfCrawlers);  
+//		CrawlController crawlChiTrib = ChicagoTribune.buildController();
+//        crawlChiTrib.startNonBlocking(ChicagoTribune.class, numberOfCrawlers);  
 		
-//		CrawlController crawlCnn= CnnCrawler.buildController();
-//		crawlCnn.startNonBlocking(CnnCrawler.class, numberOfCrawlers);
+//		CrawlController crawlCnn= Cnn.buildController();
+//		crawlCnn.startNonBlocking(Cnn.class, numberOfCrawlers);
 
-//		CrawlController crawlTime = TimeCrawler.buildController();
-//		crawlTime.startNonBlocking(TimeCrawler.class, numberOfCrawlers);
+//		CrawlController crawlTime = Time.buildController();
+//		crawlTime.startNonBlocking(Time.class, numberOfCrawlers);
 		
-//		CrawlController huffPoCrawler = HuffPoCrawler.buildController();
-//		huffPoCrawler.startNonBlocking(HuffPoCrawler.class, numberOfCrawlers);
+		CrawlController huffPoCrawler = HuffPo.buildController();
+		huffPoCrawler.startNonBlocking(HuffPo.class, numberOfCrawlers);
 		
-		CrawlController reutersController = ReutersCrawler.buildController();
-		reutersController.startNonBlocking(ReutersCrawler.class, 7);
+//		CrawlController reutersController = Reuters.buildController();
+//		reutersController.startNonBlocking(Reuters.class, 7);
 
 		
-//		CrawlController usatController = UsaTodayCrawler.buildController();
-//		usatController.startNonBlocking(UsaTodayCrawler.class, numberOfCrawlers);
+//		CrawlController usatController = UsaToday.buildController();
+//		usatController.startNonBlocking(UsaToday.class, numberOfCrawlers);
 
 
-//		CrawlController voaController = VoaCrawler.buildController();
-//		voaController.startNonBlocking(VoaCrawler.class, numberOfCrawlers);
+//		CrawlController voaController = Voa.buildController();
+//		voaController.startNonBlocking(Voa.class, numberOfCrawlers);
 
 
+
+		
 		
 	}
 }
