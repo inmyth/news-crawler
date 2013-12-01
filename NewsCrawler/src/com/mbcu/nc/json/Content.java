@@ -1,5 +1,7 @@
 package com.mbcu.nc.json;
 
+import java.util.ArrayList;
+
 public class Content {
 
 	private String url;
@@ -7,8 +9,7 @@ public class Content {
 	private String author;
 	private String place;
 	private long timestamp;
-	private String text;
-	private String html;
+	private ArrayList<String> texts;
 
 	/**
 	 * 
@@ -33,18 +34,11 @@ public class Content {
 	 * @param text
 	 *            parsed text
 	 */
-	public void setText(String text) {
-		this.text = text;
+	public void setTexts(ArrayList<String> texts) {
+		this.texts = texts;
 	}
 
-	/**
-	 * 
-	 * @param html
-	 *            The raw html
-	 */
-	public void setHtml(String html) {
-		this.html = html;
-	}
+
 
 	/**
 	 * 
@@ -78,9 +72,6 @@ public class Content {
 		return author;
 	}
 
-	public String getHtml() {
-		return html;
-	}
 
 	public String getPlace() {
 		return place;
@@ -94,8 +85,8 @@ public class Content {
 		return title;
 	}
 
-	public String getText() {
-		return text;
+	public ArrayList<String> getTexts() {
+		return texts;
 	}
 	
 	public String getUrl() {

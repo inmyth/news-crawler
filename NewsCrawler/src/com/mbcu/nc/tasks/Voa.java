@@ -141,42 +141,55 @@ public class Voa extends Base {
 		}
 	}
 	
-	@Override
-	public List<String> extract(String html) {
-		ArrayList<String> res = new ArrayList<String>();
-		Document doc = Jsoup.parse(html);
-		Element e = doc.select("div.zoomMe").first();
-		if (e != null)
-			res.add(e.text());		
-		return res;
-	}
 	    
 	@Override
-	public Content extract2Json(String html) {
+	public Content extract(String html) {
 		Content content = new Content();
-		content.setHtml(html);
 		Document doc = Jsoup.parse(html);
 
-		String date = doc.select("p.article_date").first().text();
-		String text = doc.select("div.zoomMe").first().text();
-		content.setText(text);
+		Element date = doc.select("p.article_date").first();
+
+		ArrayList<String> texts = new ArrayList<String>();
+		Element textEl = doc.select("div.zoomMe").first();
+				
+		if (textEl != null){
+			String text = textEl.text();
+			texts.add(text);
+			if (text.contains(" — ")) {
+				String[] parts = text.split(" — ");
+				if (parts.length == 2) {
+					content.setPlace(parts[0]);
+				}
+			}
+		}			
+		content.setTexts(texts);
 
 		Element title = doc.select("title").first();
 		content.setTitle(title != null ? title.text() : null);
 
 		content.setAuthor(doc.select("meta[name=Author]").attr("content"));
 
-		if (text != null && text.contains(" — ")) {
-			String[] parts = text.split(" — ");
-			if (parts.length == 2) {
-				content.setPlace(parts[0]);
+		if (date != null) {		
+			String dateStr = date.text();
+			
+			try{
+				DateTime dt;
+				if (dateStr.contains("Last updated on: ")){
+					dateStr = dateStr.substring(17);		
+					DateTimeFormatter formatter = DateTimeFormat.forPattern("MMM d, yyyy hh:mm a");
+					dt = DateTime.parse(dateStr, formatter);
+				}else if (dateStr.contains("Posted At: ")){
+					dateStr = dateStr.substring(11);		
+					DateTimeFormatter formatter = DateTimeFormat.forPattern("MMM d, yyyy hh:mm a");
+					dt = DateTime.parse(dateStr, formatter);
+				}else{
+					DateTimeFormatter formatter = DateTimeFormat.forPattern("MMM d, yyyy");
+					dt = DateTime.parse(dateStr, formatter);
+				}
+				content.setTimestamp(dt.getMillis() / 1000);
+			}catch (IllegalArgumentException e){
+				e.printStackTrace();
 			}
-		}
-
-		if (date != null) {
-			DateTimeFormatter formatter = DateTimeFormat.forPattern("MMM d, yyyy");
-			DateTime dt = DateTime.parse(date, formatter);
-			content.setTimestamp(dt.getMillis() / 1000);
 		}
 
 		return content;

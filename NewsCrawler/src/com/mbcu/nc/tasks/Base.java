@@ -36,8 +36,7 @@ public abstract class Base extends WebCrawler {
 		return url;
 	}
 	
-	public abstract List<String> extract(String html);
+	public abstract Content extract(String html);
 	
-	public abstract Content extract2Json(String html);
 
 }

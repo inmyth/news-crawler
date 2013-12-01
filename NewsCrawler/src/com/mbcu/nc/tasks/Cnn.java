@@ -160,42 +160,24 @@ public class Cnn extends Base {
 		}
 	}
 	
-	
+		
 	@Override
-	public List<String> extract(String html) {
-		ArrayList<String> res = new ArrayList<String>();
+	public Content extract(String html) {
+		Content content = new Content();
 		Document doc = Jsoup.parse(html);
+
 		Elements contents = doc.select("p");
 		Iterator<Element> it = contents.iterator();
-
+		ArrayList<String> texts = new ArrayList<String>();
 		while (it.hasNext()) {			
 			Element c = it.next();
 			String temp = c.text();
-			if (!temp.contains("Loading weather data ...")){
-				res.add(temp);
+			if (!temp.trim().isEmpty() &&
+				!temp.contains("Loading weather data ...")){
+				texts.add(temp);
 			}			
 		}
-		return res;
-	}
-	
-	@Override
-	public Content extract2Json(String html) {
-		Content content = new Content();
-		content.setHtml(html);
-		Document doc = Jsoup.parse(html);
-
-		Elements contents = doc.select("p");
-		Iterator<Element> it = contents.iterator();
-		String cString = "";
-		while (it.hasNext()) {
-			
-			Element c = it.next();
-			String temp = c.text();
-			if (!temp.contains("Loading weather data ...")){
-				cString += " " + temp;
-			}			
-		}
-		content.setText(cString);
+		content.setTexts(texts);
 
 		content.setTitle(doc.select("meta[itemprop=headline][property=og:title]").attr("content"));
 		content.setAuthor(doc.select("meta[itemprop=author][name=author]").attr("content"));
@@ -206,7 +188,7 @@ public class Cnn extends Base {
 			DateTime dt = DateTime.parse(date, formatter);
 			content.setTimestamp(dt.getMillis() / 1000);
 			}catch (IllegalArgumentException e){
-				
+				e.printStackTrace();
 			}
 		}
 		return content;

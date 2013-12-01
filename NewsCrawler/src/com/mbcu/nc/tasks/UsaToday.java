@@ -165,44 +165,16 @@ public class UsaToday extends Base{
 			FileUtils.gzipHtml(path, html);
 		}
 	}
-	    
+	    	
 	@Override
-	public List<String> extract(String html) {
-		ArrayList<String> res = new ArrayList<String>();
-		
-		Document doc = Jsoup.parse(html);		
-		Elements contents = doc.select("p");
-	
-		Iterator<Element> it = contents.iterator();
-		
-		while (it.hasNext()) {
-			Element c = it.next();		
-			/*
-			 * Assuming the content is wrapped in p tags that have no attributes
-			 */
-			Elements cc = c.getElementsByAttribute("class");
-			
-			if (cc.isEmpty())
-			{
-				res.add(c.ownText());		
-			}
-		}
-
-		return res;
-	}
-	
-	@Override
-	public Content extract2Json(String html) {
+	public Content extract(String html) {
 		Content content = new Content();
-		content.setHtml(html);
 		Document doc = Jsoup.parse(html);
 		
 		Elements contents = doc.select("p");
-		
-		
-		
+					
 		Iterator<Element> it = contents.iterator();
-		String cString = "";
+		ArrayList<String> texts = new ArrayList<String>();
 		while (it.hasNext()) {
 			Element c = it.next();		
 			/*
@@ -241,11 +213,11 @@ public class UsaToday extends Base{
 						}				
 					}
 				}
-				
-				cString += " " + ptemp;				
+				if (!ptemp.trim().isEmpty())
+					texts.add(ptemp);				
 			}
 		}
-		content.setText(cString);		
+		content.setTexts(texts);		
 
 		Element title = doc.select("h1[itemprop=headline]").first();
 		if (title != null){
@@ -271,6 +243,14 @@ public class UsaToday extends Base{
 				DateTime dt = DateTime.parse(ts, formatter);
 				content.setTimestamp(dt.getMillis() / 1000);		
 			}catch (IllegalArgumentException e){
+				try{
+//				first false format = 8 a.m. EST November 26, 2013
+				DateTimeFormatter formatter = DateTimeFormat.forPattern("h a z MMM d, yyyy");
+				DateTime dt = DateTime.parse(ts, formatter);
+				content.setTimestamp(dt.getMillis() / 1000);	
+				}catch (IllegalArgumentException ee){
+					ee.printStackTrace();
+				}
 				
 			}
 			

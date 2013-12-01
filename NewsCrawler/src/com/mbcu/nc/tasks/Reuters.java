@@ -40,8 +40,7 @@ public class Reuters extends Base {
 	public static final String HOST = "reuters.com";
 	public static final String FOLDER = Config.PATH_BASE + "reuters" + File.separator;
 		
-	
-	
+		
 	static Set<String> ignores = new HashSet<String>(){{
 		add("reuters.com/news/video");
 		add("reuters.com/news/pictures");
@@ -486,47 +485,15 @@ public class Reuters extends Base {
 			FileUtils.gzipHtml(path, html);
 		}
 	}
-	    
-	
-	public List<String> extract(String html) {
-		ArrayList<String> res = new ArrayList<String>();
-		Document doc = Jsoup.parse(html);
-		
-		Elements contents = doc.select("p");
-		Iterator<Element> it = contents.iterator();
-		while (it.hasNext()) {
-			Element c = it.next();
-			String temp = c.select("p").text();
-			if (temp.equals("Back to top") // these are end of story cues 
-					|| temp.contains("Thomson Reuters is the world's largest international multimedia news agency, providing investing news, world news, business news,")
-					|| temp.contains("list of exchanges and delays, please click here")
-					|| temp.contains("Follow me on Twitter")					
-					|| temp.contains("Our day's top images, in-depth photo essays and offbeat slices of life")
-					|| temp.contains("Reuters Breakingviews is the world's leading source of agenda-setting financial insight")
-					|| temp.contains("Breakingviews has published a selection of books for purchase and download")
-					|| temp.equals("LATEST TITLES")
-					|| temp.contains("(Additional reporting by")
-					|| temp.contains("Our top photos from the past 24 hours")
-					)
-			{
-				break;
-			}else{
-				res.add(c.text());
-			}
-			
-		}
-		return res;
-	}
-	
+	    	
 	@Override
-	public Content extract2Json(String html) {
+	public Content extract(String html) {
 		Content content = new Content();
-		content.setHtml(html);
 		Document doc = Jsoup.parse(html);
 		
 		Elements contents = doc.select("p");
 		Iterator<Element> it = contents.iterator();
-		String cString = "";
+		ArrayList<String> texts = new ArrayList<String>();
 		while (it.hasNext()) {
 			Element c = it.next();
 			String temp = c.select("p").text();
@@ -544,13 +511,12 @@ public class Reuters extends Base {
 			{
 				break;
 			}else{
-				cString += " " + c.text();
+				texts.add(temp);
 			}
 			
 		}
-		content.setText(cString);
+		content.setTexts(texts);
 		
-
 		content.setTitle(doc.select("META[property=og:title]").attr("content"));
 
 		Element place = doc.select("span.articleLocation").first();
@@ -575,7 +541,36 @@ public class Reuters extends Base {
 					DateTime dt = DateTime.parse(dateString, formatter);
 					content.setTimestamp(dt.getMillis() / 1000);
 				} catch (IllegalArgumentException e) {
-
+					e.printStackTrace();
+								
+					try{
+						System.out.println("Retrying");		
+//						22 Nov 2013
+						DateTimeFormatter formatter = DateTimeFormat.forPattern("d MMM yyyy");
+						DateTime dt = DateTime.parse(dateString, formatter);
+						content.setTimestamp(dt.getMillis() / 1000);
+					}catch (IllegalArgumentException ee) {
+						ee.printStackTrace();
+						try {
+							System.out.println("Retrying again");		
+	//						7:13am EST
+							DateTimeFormatter formatter = DateTimeFormat.forPattern("hh:mma z");
+							DateTime dt = DateTime.parse(dateString, formatter);
+							content.setTimestamp(dt.getMillis() / 1000);
+						}catch(IllegalArgumentException eee){						
+							eee.printStackTrace();
+							try{
+//								Jun 23, 2011	very mysterious error. parsing works if string retyped ??!
+								System.out.println("Retrying x3");	
+								DateTimeFormatter formatter = DateTimeFormat.forPattern("MMM d, yyyy");
+								DateTime dt = DateTime.parse(dateString, formatter);
+								content.setTimestamp(dt.getMillis() / 1000);
+							}catch(IllegalArgumentException eeee){
+								eeee.printStackTrace();
+							}
+						}
+						
+					}
 				}
 			}
 		}

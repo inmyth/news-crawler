@@ -8,6 +8,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import com.mbcu.nc.json.Content;
 import com.mbcu.nc.tasks.Base;
 import com.mbcu.nc.tasks.ChicagoTribune;
 import com.mbcu.nc.tasks.Cnn;
@@ -17,6 +18,7 @@ import com.mbcu.nc.tasks.Time;
 import com.mbcu.nc.tasks.UsaToday;
 import com.mbcu.nc.tasks.Voa;
 import com.mbcu.nc.utils.FileUtils;
+import com.mbcu.nc.utils.GsonUtils;
 
 public class Extractor {
 
@@ -24,18 +26,22 @@ public class Extractor {
 	 * Demonstration of how to extract / parse text from gzipped html
 	 */
 	public static void main(String[] args) {
-		extractor(new HuffPo(), HuffPo.FOLDER);
+		FileUtils.deleteRecursive(Voa.FOLDER, "txt");
+		extractor(new Time(), Time.FOLDER, 0);
 		System.out.print("Done");
 	}
 
 	/**
 	 * Extract text from gzip files of raw html and save it as .txt
 	 * @param corpusTask 
-	 * Worker that crawl and parses websites
+	 * Task that was used to crawl websites
 	 * @param corpusFolder 
 	 * Base folder of corpus data
+	 * @param target
+	 * Target file format (0 : json of {@link Content}, 1 : text only)
 	 */
-	public static void extractor(Base corpusTask, String corpusFolder) {
+	public static void extractor(Base corpusTask, String corpusFolder, int format) {
+
 		
 		ArrayList<File> batchList = FileUtils.listFolders(corpusFolder);
 
@@ -45,7 +51,7 @@ public class Extractor {
 					System.out.println("Processing: " + node.getAbsolutePath());
 					
 					// Build the txt path
-					String txtPath = node.getAbsolutePath().replace(".html.z", ".txt");
+					String txtPath = node.getAbsolutePath().replace("html.z", "txt");
 					
 					// What if file already exist
 					File txt = new File(txtPath);
@@ -57,15 +63,22 @@ public class Extractor {
 					String raw = FileUtils.gunzipHtml(node.getAbsolutePath());
 					
 					// Parse the content, get all <p>s
-					List<String> ps = corpusTask.extract(raw);
-					String content = "";
-					for (String p : ps){
-						content += " " + p;
+					Content content = corpusTask.extract(raw);
+					String out = "";
+					switch (format){
+					case 0 : 
+						out = GsonUtils.toJson(content);
+						break;
+					case 1 :
+						List<String> ps = content.getTexts();
+						for (String s : ps){
+							out += s + "\n";
+						}				
 					}
-					
+										
 					// Save it 
-					if (!content.trim().isEmpty()){
-						FileUtils.saveTxt(txtPath, content);
+					if (!out.trim().isEmpty()){
+						FileUtils.saveTxt(txtPath, out);
 					}else{
 						System.out.println("Skipped");
 					}

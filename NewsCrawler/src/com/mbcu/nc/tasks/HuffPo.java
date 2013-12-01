@@ -259,40 +259,24 @@ public class HuffPo extends Base {
 		}
 	}
 
+
 	@Override
-	public List<String> extract(String html) {
-		ArrayList<String> res = new ArrayList<String>();
-		Document doc = Jsoup.parse(html);
-		Elements contents = doc.select("p");
-		Iterator<Element> it = contents.iterator();
-		while (it.hasNext()) {
-			Element c = it.next();
-			String temp = c.text();
-			if (!temp.contains("Get top stories and blogs posts emailed")){
-				res.add(temp);
-			}			
-		}
-		return res;
-	}
-	
-	@Override
-	public Content extract2Json(String html) {
+	public Content extract(String html) {
 		Content content = new Content();
-		content.setHtml(html);
 		Document doc = Jsoup.parse(html);
 
 		Elements contents = doc.select("p");
 		Iterator<Element> it = contents.iterator();
-		String cString = "";
+		ArrayList<String> texts = new ArrayList<String>();
 		while (it.hasNext()) {
 			Element c = it.next();
 			String temp = c.text();
 			if (!temp.contains("Get top stories and blogs posts emailed")){
-				cString += " " + temp;
+				texts.add(temp);
 			}
 			
 		}
-		content.setText(cString);
+		content.setTexts(texts);
 
 		Element title = doc.select("title").first();
 		content.setTitle(title != null ? title.text() : null);
@@ -317,10 +301,11 @@ public class HuffPo extends Base {
 		String dateTime = doc.select("meta[name=sailthru.date]").attr("content");
 		if (dateTime != null && !dateTime.trim().isEmpty()) {
 			try{
-				DateTimeFormatter formatter = DateTimeFormat.forPattern("E, d MMM yyyy hh:mm:ss Z");
+				DateTimeFormatter formatter = DateTimeFormat.forPattern("E, d MMM yyyy HH:mm:ss Z");
 				DateTime dt = DateTime.parse(dateTime, formatter);
 				content.setTimestamp(dt.getMillis() / 1000);			
 			}catch(IllegalArgumentException e){			
+				e.printStackTrace();
 			}
 		}
 

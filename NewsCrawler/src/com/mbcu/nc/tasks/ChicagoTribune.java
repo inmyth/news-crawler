@@ -210,23 +210,11 @@ public class ChicagoTribune extends Base {
 			FileUtils.gzipHtml(path, html);
 		}
 	}
-	
-	@Override
-	public List<String> extract(String html) {
-		ArrayList<String> res = new ArrayList<String>();	
-		Document doc = Jsoup.parse(html);
-		Element story = doc.select("div#story-body-text").first();
-		if (story != null){
-			res.add(story.text());
-		}
 
-		return res;
-	}
 
 	@Override	
-	public Content extract2Json(String html) {
+	public Content extract(String html) {
 		Content content = new Content();
-		content.setHtml(html);
 		Document doc = Jsoup.parse(html);
 		Elements byLines = doc.select("div.byline");
 		if (byLines != null && byLines.size() > 1) {
@@ -239,7 +227,11 @@ public class ChicagoTribune extends Base {
 		}
 
 		Element story = doc.select("div#story-body-text").first();
-		content.setText(story != null ? story.text() : null);
+		ArrayList<String> texts = new ArrayList<String>();
+		if (story != null)
+			texts.add(story.text());
+				
+		content.setTexts(texts);
 		Element title = doc.select("h1").first();
 		content.setTitle(title != null ? title.ownText() : null);
 
@@ -273,7 +265,7 @@ public class ChicagoTribune extends Base {
 				DateTime dt = DateTime.parse(datetime, f);
 				content.setTimestamp(dt.getMillis() / 1000);
 			}catch(IllegalArgumentException e){
-				
+				e.printStackTrace();
 			}
 		}
 

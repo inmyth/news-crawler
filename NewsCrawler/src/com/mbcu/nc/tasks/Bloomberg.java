@@ -240,37 +240,23 @@ public class Bloomberg extends Base{
 			FileUtils.gzipHtml(path, html);
 		}
 	}
-	
-	@Override
-	public List<String> extract(String html) {
-		ArrayList<String> res = new ArrayList<String>();
-		Document doc = Jsoup.parse(html);
 		
-		Elements contents = doc.select("p");
-		Iterator<Element> it = contents.iterator();
-		while (it.hasNext()) {
-			Element c = it.next();
-			String temp =  c.text();
-			if (temp.trim().isEmpty()){
-				res.add(temp);				
-			}
-		}
-		return res;
-	}
-	
 	@Override
-	public Content extract2Json(String html) {
+	public Content extract(String html) {
 		Content content = new Content();
 		Document doc = Jsoup.parse(html);
 		
 		Elements contents = doc.select("p");
 		Iterator<Element> it = contents.iterator();
-		String cString = "";
+		ArrayList<String> texts = new ArrayList<String>();
 		while (it.hasNext()) {
 			Element c = it.next();
-			cString += c.select("p").text();
+			String temp =  c.text();
+			if (temp.trim().isEmpty()){
+				texts.add(temp);				
+			}
 		}
-		content.setText(cString);
+		content.setTexts(texts);
 		
 
 		content.setTitle(doc.select("meta[property=og:title]").attr("content"));

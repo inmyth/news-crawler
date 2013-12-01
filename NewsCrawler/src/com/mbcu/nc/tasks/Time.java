@@ -151,41 +151,15 @@ public class Time extends Base{
 			FileUtils.gzipHtml(path, html);
 		}
 	}
-	    
+	    	
 	@Override
-	public List<String> extract(String html) {
-		ArrayList<String> res = new ArrayList<String>();
-		Document doc = Jsoup.parse(html);
-		Elements contents = doc.select("p");
-		Iterator<Element> it = contents.iterator();
-		while (it.hasNext()) {
-			Element c = it.next();
-			String temp = c.text();
-			Elements cc = c.getElementsByAttribute("class");
-			
-			Element parent = c.parent();
-			if (!temp.trim().isEmpty() &&				
-				!parent.hasClass("fyre-comment") &&
-				cc.isEmpty() && 
-				!temp.contains("Follow @TIME")
-				)
-			{
-				res.add(temp);
-			}
-			
-		}
-		return res;
-	}
-	
-	@Override
-	public Content extract2Json(String html) {
+	public Content extract(String html) {
 		Content content = new Content();
-		content.setHtml(html);
 		Document doc = Jsoup.parse(html);
 
 		Elements contents = doc.select("p");
 		Iterator<Element> it = contents.iterator();
-		String cString = "";
+		ArrayList<String> texts = new ArrayList<String>();
 		while (it.hasNext()) {
 			Element c = it.next();
 			String temp = c.text();
@@ -197,10 +171,10 @@ public class Time extends Base{
 				!temp.contains("Follow @TIME")
 				)
 			{
-				cString += " " + temp;
+				texts.add(temp);
 			}
 		}
-		content.setText(cString);
+		content.setTexts(texts);
 
 		Element title = doc.select("h1.entry-title").first();
 		content.setTitle(title != null ? title.text() : null);
@@ -221,18 +195,24 @@ public class Time extends Base{
 			if (dateString != null && !dateString.trim().isEmpty()) {
 				try {
 					dateString = dateString.replace(".", "");
-					DateTimeFormatter formatter = DateTimeFormat
-							.forPattern("E, MMM d, yyyy");
+					DateTimeFormatter formatter = DateTimeFormat.forPattern("E, MMM d, yyyy");
 					DateTime dt = DateTime.parse(dateString, formatter);
 					content.setTimestamp(dt.getMillis() / 1000);
 				} catch (IllegalArgumentException e) {
-
+					e.printStackTrace();
+					try {
+//						"Nov 25, 2013"
+						DateTimeFormatter formatter = DateTimeFormat.forPattern("MMM dd, yyyy");
+						DateTime dt = DateTime.parse(dateString, formatter);
+						content.setTimestamp(dt.getMillis() / 1000);
+					}catch(IllegalArgumentException ee){
+//						3 hours ago ??
+						ee.printStackTrace();						
+					}
 				}
 			}
 		}
-
 		return content;
 	}
-
 
 }
