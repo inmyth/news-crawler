@@ -56,7 +56,6 @@ public class Crawler {
 //		voaController.startNonBlocking(Voa.class, numberOfCrawlers);
 
 
-
 		
 		
 	}
