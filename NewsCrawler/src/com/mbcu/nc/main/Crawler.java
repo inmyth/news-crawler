@@ -25,8 +25,10 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class Crawler {
 
-	/*
+	/**
 	 * Demonstration of how to crawl a website 
+	 * Start by instantiating {@link CrawlController} that controls delay time, depth, etc. , configurable in each task
+	 * Then start the process by calling either start or startNonBlocking (the latter is non blocking so it won't wait)
 	 */
 	public static void main(String[] args) throws Exception {	
 		
@@ -41,8 +43,6 @@ public class Crawler {
 //		CrawlController crawlTime = Time.buildController();
 //		crawlTime.startNonBlocking(Time.class, numberOfCrawlers);
 		
-//		CrawlController huffPoCrawler = HuffPo.buildController();
-//		huffPoCrawler.startNonBlocking(HuffPo.class, numberOfCrawlers);
 		
 //		CrawlController reutersController = Reuters.buildController();
 //		reutersController.startNonBlocking(Reuters.class, 7);
@@ -52,8 +52,8 @@ public class Crawler {
 //		usatController.startNonBlocking(UsaToday.class, numberOfCrawlers);
 
 
-//		CrawlController voaController = Voa.buildController();
-//		voaController.startNonBlocking(Voa.class, numberOfCrawlers);
+		CrawlController voaController = Voa.buildController();
+		voaController.startNonBlocking(Voa.class, numberOfCrawlers);
 
 
 		

@@ -23,19 +23,7 @@ public abstract class Base extends WebCrawler {
 					+ "|wav|avi|mov|mpeg|ram|m4v|pdf"
 					+ "|xml|ico|cssx"
 					+ "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
-	
 
-
-	private static String PERCENT = "%";
-	private static String SINGLE_QUOTE = "'";
-
-	public static final  String sanitize(String url){
-		url = url.substring(Config.PROTOCOL_HTTP.length());
-		url =  url.replaceAll("/", PERCENT);
-		url = url.replaceAll("\\?", SINGLE_QUOTE);
-		return url;
-	}
-	
 	public abstract Content extract(String html);
 	
 
