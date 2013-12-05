@@ -26,8 +26,8 @@ public class Extractor {
 	 * Demonstration of how to extract / parse text from gzipped html
 	 */
 	public static void main(String[] args) {
-		FileUtils.deleteRecursive(Voa.FOLDER, "txt");
-		extractor(new Time(), Time.FOLDER, 0);
+//		FileUtils.deleteRecursive(Voa.FOLDER, "txt");
+		extractor(new Voa(), Voa.FOLDER, 0);
 		System.out.print("Done");
 	}
 

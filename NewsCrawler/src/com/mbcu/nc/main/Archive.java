@@ -10,6 +10,7 @@ import java.util.zip.ZipOutputStream;
 
 import com.mbcu.nc.tasks.Cnn;
 import com.mbcu.nc.tasks.Reuters;
+import com.mbcu.nc.tasks.Voa;
 import com.mbcu.nc.utils.FileUtils;
 
 public class Archive {
@@ -19,7 +20,8 @@ public class Archive {
 	 * Demonstration of how to archive a corpus folder
 	 */
 	public static void main(String[] args) throws Exception {	
-		FileUtils.batchArchiver(Cnn.FOLDER);	
+		FileUtils.batchArchiver(Voa.FOLDER);			
+		System.out.println("done");
 	}
 	
 
