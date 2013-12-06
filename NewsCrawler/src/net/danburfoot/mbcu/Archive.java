@@ -1,4 +1,4 @@
-package com.mbcu.nc.main;
+package net.danburfoot.mbcu;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,11 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import com.mbcu.nc.tasks.Cnn;
-import com.mbcu.nc.tasks.Reuters;
-import com.mbcu.nc.tasks.Voa;
-import com.mbcu.nc.utils.FileUtils;
 
 public class Archive {
 	

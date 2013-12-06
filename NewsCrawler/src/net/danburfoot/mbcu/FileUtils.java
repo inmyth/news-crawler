@@ -1,4 +1,4 @@
-package com.mbcu.nc.utils;
+package net.danburfoot.mbcu;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -24,9 +24,6 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import com.mbcu.nc.json.Content;
-import com.mbcu.nc.main.Config;
 
 public class FileUtils {
 	private final static String PREFIX_BATCH = "batch";

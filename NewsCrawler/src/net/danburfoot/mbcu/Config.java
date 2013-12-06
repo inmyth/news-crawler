@@ -1,4 +1,4 @@
-package com.mbcu.nc.main;
+package net.danburfoot.mbcu;
 
 import java.io.File;
 

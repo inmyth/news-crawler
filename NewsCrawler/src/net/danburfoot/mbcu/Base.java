@@ -1,4 +1,4 @@
-package com.mbcu.nc.tasks;
+package net.danburfoot.mbcu;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,10 +8,6 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import com.mbcu.nc.json.Content;
-import com.mbcu.nc.main.Config;
-import com.mbcu.nc.utils.GsonUtils;
 
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 

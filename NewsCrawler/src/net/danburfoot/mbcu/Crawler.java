@@ -1,21 +1,10 @@
-package com.mbcu.nc.main;
+package net.danburfoot.mbcu;
 
 import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
-
-import com.mbcu.nc.tasks.Bloomberg;
-import com.mbcu.nc.tasks.ChicagoTribune;
-import com.mbcu.nc.tasks.Cnn;
-import com.mbcu.nc.tasks.Base;
-import com.mbcu.nc.tasks.HuffPo;
-import com.mbcu.nc.tasks.Reuters;
-import com.mbcu.nc.tasks.Time;
-import com.mbcu.nc.tasks.UsaToday;
-import com.mbcu.nc.tasks.Voa;
-import com.mbcu.nc.utils.FileUtils;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;

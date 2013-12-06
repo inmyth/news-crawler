@@ -1,4 +1,4 @@
-package com.mbcu.nc.tasks;
+package net.danburfoot.mbcu;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -19,11 +19,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import com.mbcu.nc.json.Content;
-import com.mbcu.nc.main.Config;
-import com.mbcu.nc.utils.FileUtils;
-import com.mbcu.nc.utils.GsonUtils;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;

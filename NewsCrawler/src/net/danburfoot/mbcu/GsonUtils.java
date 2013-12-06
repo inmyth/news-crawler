@@ -1,4 +1,4 @@
-package com.mbcu.nc.utils;
+package net.danburfoot.mbcu;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;

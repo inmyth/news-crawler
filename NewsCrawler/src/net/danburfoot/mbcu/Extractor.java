@@ -1,4 +1,4 @@
-package com.mbcu.nc.main;
+package net.danburfoot.mbcu;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,18 +7,6 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import com.mbcu.nc.json.Content;
-import com.mbcu.nc.tasks.Base;
-import com.mbcu.nc.tasks.ChicagoTribune;
-import com.mbcu.nc.tasks.Cnn;
-import com.mbcu.nc.tasks.HuffPo;
-import com.mbcu.nc.tasks.Reuters;
-import com.mbcu.nc.tasks.Time;
-import com.mbcu.nc.tasks.UsaToday;
-import com.mbcu.nc.tasks.Voa;
-import com.mbcu.nc.utils.FileUtils;
-import com.mbcu.nc.utils.GsonUtils;
 
 public class Extractor {
 

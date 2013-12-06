@@ -1,4 +1,4 @@
-package com.mbcu.nc.json;
+package net.danburfoot.mbcu;
 
 import java.util.ArrayList;
 
